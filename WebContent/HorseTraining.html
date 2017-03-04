@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+<style>
+	#signup label.error { 
+		font-size: 0.8em;
+		color: #F00; 
+		font-weight: bold; 
+		display: block; 
+		margin-left: 110px;
+	}
+	#signup input.error, #signup select.error{
+		 
+		background:#FFA9B8;
+		border: 1px solid red;
+	
+	}
+	
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="js/jquery.validate.min.js"></script>
+
+<script>
+	$(document).ready(function() { 
+	
+		// Validate the form.
+		$('#signup').validate({
+		
+			rules: {
+				email: {
+					required: true,
+					email: true
+				},
+				name: {
+					required: true
+				},
+				clinic: {
+					required: true
+				},
+				stalls: {
+					required:true,
+					digits: true
+				},
+				//spam: "required"
+			},// end rules
+			messages: {
+				email:{
+					required: "Please supply an e-mail address.",
+					email: "This is not a valid email address"
+				},
+				name:{
+					required: "Please enter your name."
+				},
+				clinic:{
+					required: "Please select at least 1 box."
+				},
+				stalls:{
+					required: "Please enter a value.",
+					digits: "Enter a valid whole number."
+				}
+
+
+			}, // end messages
+			
+			errorPlacement: function(error, element) { 
+				if (element.is(":radio") || element.is(":checkbox")) { 
+					error.appendTo( element.parent()); 
+				} else { 
+					error.insertAfter(element); 
+				} 
+			} // end errorPlacement
+		
+		});
+		// end validation	
+		 
+		// When the user hovers over the element with ID photo               
+		$('#photo').hover(function()  {                
+				// swap  the current photo with another photo, horse2.png              
+				// with attr using the 'src' attribute                
+				$("#photo").attr('src', './images/horse2.png'  );         
+			}, // end mouseover           
+			function() {             
+				// swap  the current photo with horse1.png
+				// with attr 'src' attribute
+        	     $("#photo").attr('src', './images/horse1.png'  );            
+			}        
+		); // end hover  
+		
+		
+		// Submit Function
+		
+		$("form").submit(function(){
+						
+			// Process only if form is valid.
+			if($(this).valid()) {
+            	
+            	
+            	// Declare all variables
+      		let	clinicCox = 80;
+			let	clinicAnderson = 75;
+			let	clinicGoodnight = 90;
+			
+			var stallNumber = $('#stalls').val();
+			
+			var total = 0;
+			var tax = 0;
+			var subtotal = 0;
+			
+			var checkCox = false;
+			var checkAnderson = false;
+			var checkGoodnight = false;
+			
+			// Set to true if box checked.
+			if ($('#anderson').prop('checked')){
+				checkAnderson = true;
+				//subtotal = subtotal + clinicAnderson;
+			} else {
+				checkAnderson = false;
+			}
+			
+			if ($('#cox').prop('checked')){
+				checkCox = true;
+				//subtotal = subtotal + clinicCox;
+			} else {
+				checkCox = false;
+			}
+
+			if ($('#goodnight').prop('checked')){
+				checkGoodnight = true;
+				//subtotal = subtotal + clinicGoodnight;
+			} else {
+				checkGoodnight = false;
+			}
+
+
+			// Box checked is true, add it to subtotal. 
+			
+			if (checkGoodnight) {
+				subtotal = subtotal + clinicGoodnight;
+			}
+			
+			if (checkAnderson) {
+				subtotal = subtotal + clinicAnderson;
+			}
+			
+			if (checkCox) {
+				subtotal = subtotal + clinicCox;
+			}
+
+			// Calculations for final price.
+			
+        	subtotal = subtotal + (stallNumber * 20);
+        	$('#subtotal').val(subtotal.toFixed(2));
+        	tax = subtotal*0.07;
+        	tax = tax.toFixed(2);
+        	$('#taxes').val(tax);
+        	total = subtotal + (subtotal*0.07);
+        	total = total.toFixed(2);
+        	$('#total').val(total);
+        	
+        	
+        	// Let user know the form has been submitted successfully.
+            	alert('the form is valid and has been submitted');
+
+            	
+
+        	}
+        
+      	});
+      	
+      	
+      	$('#submit').click(function() {
+      	
+      	// NOTE, think it was better to just do this in the submit function. Working well otherwise.
+      	
+      	
+      	/*
+      		// Declare all variables
+      		let	clinicCox = 80;
+			let	clinicAnderson = 75;
+			let	clinicGoodnight = 90;
+			
+			var stallNumber = $('#stalls').val();
+			
+			var total = 0;
+			var tax = 0;
+			var subtotal = 0;
+			
+			var checkCox = false;
+			var checkAnderson = false;
+			var checkGoodnight = false;
+			
+			// Set to true if box checked.
+			if ($('#anderson').prop('checked')){
+				checkAnderson = true;
+				//subtotal = subtotal + clinicAnderson;
+			} else {
+				checkAnderson = false;
+			}
+			
+			if ($('#cox').prop('checked')){
+				checkCox = true;
+				//subtotal = subtotal + clinicCox;
+			} else {
+				checkCox = false;
+			}
+
+			if ($('#goodnight').prop('checked')){
+				checkGoodnight = true;
+				//subtotal = subtotal + clinicGoodnight;
+			} else {
+				checkGoodnight = false;
+			}
+
+
+			// Box checked is true, add it to subtotal. 
+			
+			if (checkGoodnight) {
+				subtotal = subtotal + clinicGoodnight;
+			}
+			
+			if (checkAnderson) {
+				subtotal = subtotal + clinicAnderson;
+			}
+			
+			if (checkCox) {
+				subtotal = subtotal + clinicCox;
+			}
+
+			// Calculations for final price.
+			
+        	subtotal = subtotal + (stallNumber * 20);
+        	$('#subtotal').val(subtotal.toFixed(2));
+        	tax = subtotal*0.07;
+        	tax = tax.toFixed(2);
+        	$('#taxes').val(tax);
+        	total = subtotal + (subtotal*0.07);
+        	total = total.toFixed(2);
+        	$('#total').val(total);
+        	
+        	*/
+        	
+
+			
+      	}); // end click of submit. 
+      		
+		
+		
+	}); // end ready  
+</script>
+
+</head>
+<body style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+
+	<div style="float:right;"><img src="images/horse1.png" width="249" height="179" id="photo"></div>
+	
+	<div style="text-align:center;">
+		<h1>Horse Training Clinics</h1>
+		<p>Welcome to the 2017 Sarasota Horse Clinics</p>	
+	</div>
+	
+
+	<form name="signup" id="signup" onsubmit="return false;">
+	
+	<p>Date: March 11, 2017<br>Time: 9 am to 4 pm</p>
+	
+	<div>   <p><label for="name">Participant Name</label>
+  		<input name="name" type="text" id="name" size="36" ></p>
+	</div> 
+	<div>   <p><label for="email">Email Address</label>
+  		<input name="email" type="text" id="email" size="36"></p>
+	</div>
+	
+	<div>
+		<p>Select the clinic(s) you'll be participating in:</p>
+		
+		<label for="anderson">Clinton Anderson</label>
+  		<input type="checkbox" name="clinic" id="anderson" value="anderson" >
+  		
+  		<label for="cox">Chris Cox</label>
+  		<input type="checkbox" name="clinic" id="cox" value="cox">
+  		
+  		<label for="goodnight">Julie Goodnight</label> 
+  		<input type="checkbox" name="clinic" id="goodnight" value="goodnight">
+  		
+  	</div> 
+  		
+  		
+  	<div>
+  		<p><label for="stalls">Number of stalls you'll need</label>
+  		<input name="stalls" type="text" id="stalls" size="5">($20 per stall)</p>
+  	</div>
+  		
+  		
+  	<div>   
+  	
+  		<p>
+  		
+  		<table style="width: 300px">
+			<tr>
+				<td><label for="subtotal" class="label">Subtotal</label></td>
+				<td><input name="subtotal" type="text" id="subtotal" size="20" readonly>
+</td>
+			</tr>
+			<tr>
+				<td><label for="taxes" class="label">Taxes</label></td>
+				<td><input name="taxes" type="text" id="taxes" size="20" readonly>
+</td>
+			</tr>
+			<tr>
+				<td><label for="total" class="label">Total</label></td>
+				<td><input name="total" type="text" id="total" size="20" readonly>
+</td>
+			</tr>
+		</table>
+		
+		</p>
+  	
+  			
+	</div> 
+  		
+  		
+  	
+	
+	<div>
+		<p>
+   		<input type="submit" name="submit" id="submit" value="SUBMIT" style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+   		</p>
+	</div> 
+	</form> 
+
+</body>
+</html>
